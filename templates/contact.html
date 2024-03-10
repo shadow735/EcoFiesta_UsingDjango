@@ -1,0 +1,67 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, width=device-width" />
+  <link rel="stylesheet" href="{% static 'css/global.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/index1.css' %}" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" />
+</head>
+
+<body>
+  <div class="contact-us">
+    <div class="rectangle-parent">
+      <img class="frame-child" alt="" src="/media/rectangle-3840@2x.png" /><img class="frame-item" alt=""
+        src="/media/rectangle-3841.svg" /><img class="frame-inner" alt="" src="/media/ellipse-793.svg" /><img
+        class="ellipse-icon" alt="" src="/media/ellipse-794.svg" />
+      <div class="contact-information">Contact Information</div>
+      <img class="carbonlocation-filled-icon" alt="" src="/media/carbonlocationfilled.svg" /><a
+        class="bxsphone-call-parent" href="tel:8433767254"><img class="bxsphone-call-icon" alt=""
+          src="/media/bxsphonecall.svg" />
+        <div class="div">+91 8433767254</div>
+      </a><a class="icsharp-email-parent" href="mailto:akashchoudhary436@gmail.com?subject=Hello"><img
+          class="bxsphone-call-icon" alt="" src="/media/icsharpemail.svg" />
+        <div class="div">akashchoudhary436@gmail.com</div>
+      </a><a class="atharva-college-of" href="https://www.google.com/maps/dir//Atharva+College+Of+Engineering,+Malad+Marve+Road,+Shri+Sevantilal+Khandwala+Marg,+Charkop+Naka,+Malad+West,+Mumbai,+Maharashtra+400095/@19.1979139,72.8243954,17z/data=!4m8!4m7!1m0!1m5!1m1!1s0x3be7b7c24db49add:0x973ee0458244da44!2m2!1d72.8272574!2d19.1977247">Atharva College of Engineering</a>
+      <h5 class="say-something-to">Say something to start a live chat!</h5>
+    </div>
+    
+    <img class="letter-send-1-icon" alt="" src="/media/letter-send-1@2x.png" />
+    <form method="POST" action="{% url 'contact' %}" id="contactForm" name="contactForm" class="contactForm" novalidate="novalidate">
+    {% csrf_token %}
+
+    <textarea class="contact-us-child"name="Cmessage" placeholder = "Message" id="Cmessage"></textarea>
+
+    <input class="contact-us-item" name="Cemail" id="Cemail" placeholder = "Email ID"type="text" />
+    <div class="email-id">Email Id</div>
+
+    <input class="contact-us-inner"  name="Ccontact" id="Ccontact"placeholder = "Contact No." type="text" />
+    <h4 class="contact-no">Contact No</h4>
+
+    <input class="rectangle-input" name="Csubject" id="Csubject"  placeholder = "Subject" type="text" />
+    <h4 class="last-name">Subject</h4>
+
+    <input class="contact-us-child1" name="Cname" placeholder = "Name" id="Cname"  type="text" />
+    <h4 class="first-name">First Name</h4>
+
+    <h4 class="contact">
+      <div class="any-question-or">
+        Any question or remarks? Just write us a message!
+      </div>
+    </h4>
+    <h1 class="contact-us1">Contact Us</h1>
+
+    </div>
+    <div class="form-group">
+      <input type="submit" value="Send Message" class="send-message-wrapper">
+
+      <!--  is the container for the message that will be displayed while the form is being submitted -->
+
+      <div class="submitting"></div>
+  </form>
+  </div>
+</body>
+
+
+{% endblock %}

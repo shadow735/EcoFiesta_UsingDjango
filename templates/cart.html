@@ -1,0 +1,215 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<a href="{% url 'clear_cart' %}" class="btn btn-secondary">Clear Cart</a>
+<section class="pb-4">
+  <div class="bg-white border rounded-5">
+    <section
+      class="w-100 p-4"
+      style="background-color: #eee; border-radius: 0.5rem 0.5rem 0 0"
+    >
+    <div class="row">
+      <div class="col" >
+          <div class="card" >
+              <div class="card-body p-4" >
+                  <div class="row" >
+                      <div class="col-lg-7" >
+                          <h5 class="mb-3" >
+                              <a href="/bicyclelist/" class="text-body"
+                                  ><i class="fas fa-long-arrow-alt-left me-2"></i>Continue
+                                  shopping</a
+                              >
+                          </h5>
+                          <hr />
+  
+                          <div
+                              class="d-flex justify-content-between align-items-center mb-4"
+                          >
+                              <div>
+                                  <p class="mb-1">Shopping cart</p>
+                                  <p class="mb-0">
+                                      You have {{ items.count }} items in your cart
+                                  </p>
+                              </div>
+                              <div>
+                                  <p class="mb-0">
+                                      <span class="text-muted">Sort by:</span>
+                                      <a href="#!" class="text-body"
+                                          >price <i class="fas fa-angle-down mt-1"></i
+                                      ></a>
+                                  </p>
+                              </div>
+                          </div>
+                          {% for item in items %}
+                          <div class="card mb-3">
+                              <div class="card-body">
+                                  <div class="d-flex justify-content-between">
+                                      <div class="d-flex flex-row align-items-center">
+                                          {% if item.image %}
+                                          <div>
+                                              <img
+                                              src="{{ item.image.url }}"
+                                              class="img-fluid rounded-3"
+                                              alt="{{ item.product.product_name }}"
+                                              style="width: 65px"
+                                              />
+                                          </div>
+                                          {% else %}
+                                          <p>Your cart is empty</p>
+                                          {% endif %}
+                                          <div class="ms-3">
+                                              <h5>{{ item.product.product_name }}</h5>
+                                          </div>
+                                      </div>
+                                      <div class="d-flex flex-row align-items-center">
+                                          <div style="width: 50px">
+                                              <h5 class="fw-normal mb-0">{{ item.quantity }}</h5>
+                                          </div>
+                                          <div style="width: 80px">
+                                              <h5 class="mb-0">
+                                                  Rs: {{ item.product.product_price }}
+                                              </h5>
+                                          </div>
+                                          <form
+                                          action="{% url 'delete_from_cart' item.id %}"
+                                          method="POST"
+                                          >
+                                          {% csrf_token %}
+                                          <button type="submit" class="btn btn-danger">
+                                              <i class="fas fa-trash-alt"></i> Remove
+                                          </button>
+                                          </form>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+    </section>
+  
+    <div class="card-body d-flex justify-content-center">
+      <button type="button" class="btn btn-info btn-lg" id="rzp-button1">
+          <div class="d-flex justify-content-between align-items-center">
+              <span>Rs: {{ total_price_security }} </span>
+              <span>
+                  Checkout
+                  <i class="fas fa-long-arrow-alt-right ms-2"></i>
+              </span>
+          </div>
+      </button>
+  </div>
+  
+    <div class="p-4 text-center border-top mobile-hidden">
+      <a
+        class="btn btn-link px-3"
+        data-mdb-toggle="collapse"
+        href="#example1"
+        role="button"
+        aria-expanded="false"
+        aria-controls="example1"
+        data-ripple-color="hsl(0, 0%, 67%)"
+      >
+      </a>
+    </div>
+  </div>
+</section>
+<style>
+  /* Increase font size and boldness for product names */
+  .card-body h5 {
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+
+  /* Adjust spacing for quantity and price */
+  .card-body .d-flex {
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  /* Remove button outline and adjust padding */
+  button:focus {
+    outline: none;
+  }
+
+  .btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+  }
+
+  /* Add padding to total section */
+  .card.bg-primary {
+    padding: 20px;
+  }
+
+  /* Adjust font size for total section */
+  .card.bg-primary h5 {
+    font-size: 1.3rem;
+  }
+
+  /* Adjust font size for checkout button */
+  .btn.btn-info.btn-block.btn-lg {
+    font-size: 1.2rem;
+  }
+  .card.bg-primary.text-white.rounded-3 {
+    background-color: gray;
+  }
+
+  .card-body {
+    max-width: 1000px;
+  }
+
+  /* Remove top border for mobile devices */
+  @media screen and (max-width: 767px) {
+    .mobile-hidden {
+      border-top: none !important;
+    }
+  }
+</style>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    key: "rzp_test_dz1TRmxCYPsPUM",
+    amount: "{{ razor_amount }}",
+    currency: "INR",
+    name: "Cycle",
+    description: "Transaction",
+    image: "https://example.com/your_logo",
+    handler: function (response) {
+      // redirect to invoice page if payment successful
+      window.location.href =
+        "{% url 'invoice' %}?payment_id=" + response.razorpay_payment_id;
+    },
+    prefill: {
+      name: "{{ request.user.username }}",
+      email: "{{ request.user.email }}",
+    },
+    notes: {
+      address: "Razorpay Corporate Office",
+    },
+    theme: {
+      color: "#3399cc",
+    },
+  };
+
+  var rzp1 = new Razorpay(options);
+  rzp1.on("payment.failed", function (response) {
+    alert(response.error.code);
+    alert(response.error.description);
+    alert(response.error.source);
+    alert(response.error.step);
+    alert(response.error.reason);
+    alert(response.error.metadata.order_id);
+    alert(response.error.metadata.payment_id);
+  });
+  document.getElementById("rzp-button1").onclick = function (e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+</script>
+
+{% endblock %}
